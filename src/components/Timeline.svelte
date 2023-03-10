@@ -1,5 +1,5 @@
 <script>
-	import moment, { duration } from 'moment';
+	import moment from 'moment';
 	export let scheduledTimestamps = [];
 	export let startDate = moment();
 	export let endDate = moment().endOf('D');
@@ -23,6 +23,7 @@
 			const timelineItem = { timestamp: currentMinute.format(dateFormat), scheduled: false };
 
 			if (
+				scheduledTimestampsDatesCount < scheduledTimestamps.length &&
 				currentMinute.isSame(moment(scheduledTimestamps[scheduledTimestampsDatesCount]), 'minute')
 			) {
 				scheduledTimestampsDatesCount += 1;
@@ -36,13 +37,22 @@
 	}
 
 	$: scheduledDates = constructTimeLine(startDate, endDate, scheduledTimestamps);
+
+	let carousel;
+	export let scrollLeft;
+
+	const handleScroll = () => {
+		scrollLeft = carousel.scrollLeft;
+	};
+
+	$: {
+		if (carousel) {
+			carousel.scrollLeft = scrollLeft;
+		}
+	}
 </script>
 
-startDate: {startDate}
-endDate: {endDate}
-scheduledTimestamps: {moment(scheduledTimestamps[0]).format('HH:mm DD MMM YYYY')}
-
-<div class="wrapper">
+<div class="wrapper" bind:this={carousel} on:scroll={handleScroll}>
 	<div class="timeline">
 		{#each scheduledDates as scheduledDate, i}
 			<div class="minute" class:scheduled={scheduledDate.scheduled} date={scheduledDate.timestamp}>
@@ -58,7 +68,7 @@ scheduledTimestamps: {moment(scheduledTimestamps[0]).format('HH:mm DD MMM YYYY')
 
 <style>
 	.wrapper {
-		background: lightcyan;
+		background: lightyellow;
 		border-radius: 8px;
 		width: 100%;
 
@@ -71,6 +81,7 @@ scheduledTimestamps: {moment(scheduledTimestamps[0]).format('HH:mm DD MMM YYYY')
 
 	.vertical-date {
 		position: absolute;
+		z-index: 1;
 		top: -35px;
 		left: -37px;
 		transform: rotate(-90deg);
@@ -79,14 +90,6 @@ scheduledTimestamps: {moment(scheduledTimestamps[0]).format('HH:mm DD MMM YYYY')
 		display: flex;
 		justify-content: center;
 		align-items: center;
-	}
-
-	.vertical-date.start-date {
-		left: 35px;
-	}
-
-	.vertical-date.end-date {
-		right: 35px;
 	}
 
 	.timeline {
@@ -111,9 +114,14 @@ scheduledTimestamps: {moment(scheduledTimestamps[0]).format('HH:mm DD MMM YYYY')
 		border-right: 1px solid white;
 	}
 
-	.minute:hover,
+	.minute:hover {
+		background-color: darkgray;
+	}
 	.minute.scheduled {
-		background-color: lightseagreen;
+		background-color: lightgreen;
+	}
+	.minute.scheduled:hover {
+		background-color: green;
 	}
 
 	.minute::after {

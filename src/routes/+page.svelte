@@ -20,6 +20,8 @@
 			endDate = urlParams.get('end_date');
 		}
 	});
+
+	let scrollLeft = 250;
 </script>
 
 <TimeSelectionSlider bind:startDate bind:endDate />
@@ -31,6 +33,7 @@
 		<Cron
 			startDate={moment(startDate, 'YYYY-MM-DDTHH:mm')}
 			endDate={moment(endDate, 'YYYY-MM-DDTHH:mm')}
+			bind:scrollLeft
 			{...cron}
 		/>
 	{/each}

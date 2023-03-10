@@ -15,6 +15,8 @@
 
 	let cardOpen = true;
 	$: cronScheduledTimesPromise = cardOpen && getCronByName(name, startDate, endDate);
+
+	export let scrollLeft;
 </script>
 
 <div class="wrapper">
@@ -31,7 +33,12 @@
 			{#await cronScheduledTimesPromise}
 				Loading scheduled times...
 			{:then data}
-				<Timeline scheduledTimestamps={data.scheduledTimestamps} {startDate} {endDate} />
+				<Timeline
+					scheduledTimestamps={data.scheduledTimestamps}
+					{startDate}
+					{endDate}
+					bind:scrollLeft
+				/>
 			{/await}
 		</div>
 	{/if}
