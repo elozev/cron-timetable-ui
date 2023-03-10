@@ -2,18 +2,19 @@
 	import moment from 'moment';
 	import Switch from '@smui/switch';
 	import { getCronByName } from '../utils/data-retriever';
-	import { dataset_dev, each } from 'svelte/internal';
 	import Timeline from './Timeline.svelte';
 
 	export let name;
 	export let suspended;
 	export let schedule;
 	export let nextScheduledDate;
+	export let startDate;
+	export let endDate;
 
 	$: formattedDate = moment(nextScheduledDate).format('HH:mm:ss DD/MM/YYYY');
 
 	let cardOpen = true;
-	$: cronScheduledTimesPromise = cardOpen && getCronByName(name);
+	$: cronScheduledTimesPromise = cardOpen && getCronByName(name, startDate, endDate);
 </script>
 
 <div class="wrapper">
@@ -30,11 +31,7 @@
 			{#await cronScheduledTimesPromise}
 				Loading scheduled times...
 			{:then data}
-				<Timeline
-					scheduledTimestamps={data.scheduledTimestamps}
-					startDate={moment().startOf('D')}
-					endDate={moment().endOf('D')}
-				/>
+				<Timeline scheduledTimestamps={data.scheduledTimestamps} {startDate} {endDate} />
 			{/await}
 		</div>
 	{/if}

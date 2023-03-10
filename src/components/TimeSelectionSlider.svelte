@@ -1,23 +1,33 @@
 <script>
 	import moment from 'moment';
 
-	let startDate = moment().startOf('d').format('YYYY-MM-DDTHH:mm');
-	let endDate = moment().endOf('d').format('YYYY-MM-DDTHH:mm');
+	const handleChange = (type) => (e) => {
+		const urlParams = new URLSearchParams(window.location.search);
+		urlParams.set(type, e.target.value);
+		window.location.search = urlParams.toString();
+	};
+
+	export let startDate;
+	export let endDate;
 </script>
 
 <div class="slider-wrapper">
 	<div class="flex-center">
 		<div class="container">
 			<div class="content">
-				<input type="datetime-local" bind:value={startDate} />
-				<input type="datetime-local" bind:value={endDate} />
+				<input
+					type="datetime-local"
+					bind:value={startDate}
+					on:change={(e) => handleChange('start_date')(e)}
+				/>
+				<input
+					type="datetime-local"
+					bind:value={endDate}
+					on:change={(e) => handleChange('end_date')(e)}
+				/>
 			</div>
 		</div>
 	</div>
-	<!-- <br />
-	startDate: {startDate}
-	<br />
-	endDate: {endDate} -->
 </div>
 
 <style>

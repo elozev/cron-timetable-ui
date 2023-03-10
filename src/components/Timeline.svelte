@@ -1,27 +1,58 @@
 <script>
-	import moment from 'moment';
+	import moment, { duration } from 'moment';
 	export let scheduledTimestamps = [];
-	export let startDate;
-	export let endDate;
+	export let startDate = moment();
+	export let endDate = moment().endOf('D');
 	const minutesInRange = 24 * 60;
-
 	const dateFormat = 'HH:mm:ss D MMM YYYY';
-	const hourFormat = 'HH:mm:ss';
+	const hourFormat = 'HH:mm';
+
+	function constructTimeLine(startDate, endDate, scheduledTimestamps) {
+		const duration = moment.duration(endDate.diff(moment(startDate)));
+		const minutes = Math.round(duration.asMinutes());
+
+		let scheduledTimestampsDatesCount = 0;
+		let timelineItems = [];
+
+		if (moment(scheduledTimestamps[scheduledTimestampsDatesCount]).isBefore(startDate)) {
+			scheduledTimestampsDatesCount += 1;
+		}
+
+		for (var minuteCount = 0; minuteCount < minutes; minuteCount++) {
+			const currentMinute = startDate.clone().set({ second: 0 }).add(minuteCount, 'm');
+			const timelineItem = { timestamp: currentMinute.format(dateFormat), scheduled: false };
+
+			if (
+				currentMinute.isSame(moment(scheduledTimestamps[scheduledTimestampsDatesCount]), 'minute')
+			) {
+				scheduledTimestampsDatesCount += 1;
+				timelineItem.scheduled = true;
+			}
+
+			timelineItems.push(timelineItem);
+		}
+
+		return timelineItems;
+	}
+
+	$: scheduledDates = constructTimeLine(startDate, endDate, scheduledTimestamps);
 </script>
+
+startDate: {startDate}
+endDate: {endDate}
+scheduledTimestamps: {moment(scheduledTimestamps[0]).format('HH:mm DD MMM YYYY')}
 
 <div class="wrapper">
 	<div class="timeline">
-		<div class="vertical-date start-date">{startDate.format(hourFormat)}</div>
-		{#each Array(minutesInRange) as _, i}
-			<div class="minute" date={startDate.clone().add(i, 'm').format(dateFormat)}>
-				{#if i % 30 === 0}
-					<div class="vertical-date start-date">
+		{#each scheduledDates as scheduledDate, i}
+			<div class="minute" class:scheduled={scheduledDate.scheduled} date={scheduledDate.timestamp}>
+				{#if i % 10 === 0}
+					<div class="vertical-date">
 						{startDate.clone().add(i, 'm').format(hourFormat)}
 					</div>
 				{/if}
 			</div>
 		{/each}
-		<div class="vertical-date end-date">{endDate.format(hourFormat)}</div>
 	</div>
 </div>
 
@@ -40,7 +71,8 @@
 
 	.vertical-date {
 		position: absolute;
-		top: -50px;
+		top: -35px;
+		left: -37px;
 		transform: rotate(-90deg);
 		width: 80px;
 		overflow: visible;
@@ -64,7 +96,7 @@
 		padding-right: 80px;
 		background: lightgrey;
 		height: 30px;
-		width: calc(1440px * 10);
+		width: fit-content;
 		display: flex;
 		justify-content: start;
 	}
@@ -79,7 +111,8 @@
 		border-right: 1px solid white;
 	}
 
-	.minute:hover {
+	.minute:hover,
+	.minute.scheduled {
 		background-color: lightseagreen;
 	}
 
@@ -89,6 +122,8 @@
 		position: absolute;
 		width: fit-content;
 		z-index: 30;
+
+		white-space: nowrap;
 
 		background: white;
 		box-shadow: -3px 3px 9px -1px rgba(0, 0, 0, 0.75);
