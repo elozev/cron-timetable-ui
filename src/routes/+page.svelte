@@ -9,7 +9,6 @@
 
 	let startDate = moment().format('YYYY-MM-DDTHH:mm');
 	let endDate = moment().endOf('d').format('YYYY-MM-DDTHH:mm');
-	let showSuspended = false;
 
 	onMount(async () => {
 		const urlParams = new URLSearchParams(window.location.search);

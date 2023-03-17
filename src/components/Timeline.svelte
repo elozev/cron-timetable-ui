@@ -67,7 +67,7 @@
 
 <style>
 	.wrapper {
-		background: lightyellow;
+		background: white;
 		border-radius: 8px;
 		width: 100%;
 
@@ -109,7 +109,7 @@
 		width: 10px;
 		height: 100%;
 		cursor: pointer;
-		background-color: gray;
+		background-color: #f2f2fd;
 		border-right: 1px solid white;
 	}
 
@@ -117,7 +117,7 @@
 		background-color: darkgray;
 	}
 	.minute.scheduled {
-		background-color: lightgreen;
+		background-color: #58db36;
 	}
 	.minute.scheduled:hover {
 		background-color: green;

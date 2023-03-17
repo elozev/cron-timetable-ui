@@ -17,6 +17,7 @@
 					<label class="input-label">Start date:</label>
 					<input
 						type="datetime-local"
+						max={endDate}
 						bind:value={startDate}
 						on:change={(e) => handleChange('start_date')(e)}
 					/>
@@ -25,6 +26,7 @@
 					<label class="input-label">End date:</label>
 					<input
 						type="datetime-local"
+						min={startDate}
 						bind:value={endDate}
 						on:change={(e) => handleChange('end_date')(e)}
 					/>
@@ -43,7 +45,12 @@
 		width: 100%;
 		height: 80px;
 
-		background: #d3d3d3;
+		color: white;
+		background: #6f6af8;
+		box-shadow: 0px 13px 18px -6px rgba(0, 0, 0, 0.1);
+
+		border-bottom-right-radius: 10px;
+		border-bottom-left-radius: 10px;
 	}
 
 	.flex-center {
@@ -73,5 +80,12 @@
 		display: block;
 		margin-right: 10px;
 		font-weight: bold;
+	}
+
+	input {
+		min-width: 180px;
+		padding: 4px 8px;
+		border: none;
+		border-radius: 6px;
 	}
 </style>

@@ -4,6 +4,7 @@
 	import { getCronByName } from '../utils/data-retriever';
 	import Timeline from './Timeline.svelte';
 	import { onMount } from 'svelte';
+	const DEFAULT_DATE_FORMAT = 'HH:mm:ss DD/MM/YYYY';
 
 	export let name;
 	export let suspended;
@@ -11,8 +12,9 @@
 	export let nextScheduledDate;
 	export let startDate;
 	export let endDate;
+	export let status = {};
 
-	$: formattedDate = moment(nextScheduledDate).format('HH:mm:ss DD/MM/YYYY');
+	const { lastScheduleTime, lastSuccessfulTime } = status;
 
 	let cardOpen = false;
 	$: cronScheduledTimesPromise = cardOpen && getCronByName(name, startDate, endDate);
@@ -55,10 +57,23 @@
 <div class="wrapper">
 	<div class="header">
 		<h4 class="cron-name">{name}</h4>
+		<Switch bind:checked={cardOpen} on:SMUISwitch:change={handleCardOpen} />
+	</div>
+	<div class="meta-wrapper">
 		<p class="cron-meta"><span>Suspended:</span> {suspended}</p>
 		<p class="cron-meta"><span>Schedule:</span> {schedule}</p>
-		<p class="cron-meta"><span>Next scheduled run at:</span> {formattedDate}</p>
-		<Switch bind:checked={cardOpen} on:SMUISwitch:change={handleCardOpen} />
+		<p class="cron-meta">
+			<span>Next scheduled time:</span>
+			{(nextScheduledDate && moment(nextScheduledDate).format(DEFAULT_DATE_FORMAT)) || '-'}
+		</p>
+		<p class="cron-meta">
+			<span>Last scheduled time:</span>
+			{(lastScheduleTime && moment(lastScheduleTime).format(DEFAULT_DATE_FORMAT)) || '-'}
+		</p>
+		<p class="cron-meta">
+			<span>Last successful time:</span>
+			{(lastSuccessfulTime && moment(lastSuccessfulTime).format(DEFAULT_DATE_FORMAT)) || '-'}
+		</p>
 	</div>
 
 	{#if cardOpen}
@@ -90,6 +105,12 @@
 	}
 
 	.header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.meta-wrapper {
 		width: 100%;
 		display: flex;
 		justify-content: space-between;
@@ -100,9 +121,12 @@
 	.cron-name {
 		flex: 1;
 		width: 100%;
+		font-size: 22px;
+		text-transform: uppercase;
 	}
 
 	.cron-meta > span {
+		display: block;
 		font-weight: 800;
 		color: black;
 	}
