@@ -1,10 +1,8 @@
 <script>
-	import moment from 'moment';
-
 	const handleChange = (type) => (e) => {
 		const urlParams = new URLSearchParams(window.location.search);
 		urlParams.set(type, e.target.value);
-		window.location.search = urlParams.toString();
+		history.replaceState({}, '', `?${urlParams.toString()}`);
 	};
 
 	export let startDate;
@@ -15,16 +13,22 @@
 	<div class="flex-center">
 		<div class="container">
 			<div class="content">
-				<input
-					type="datetime-local"
-					bind:value={startDate}
-					on:change={(e) => handleChange('start_date')(e)}
-				/>
-				<input
-					type="datetime-local"
-					bind:value={endDate}
-					on:change={(e) => handleChange('end_date')(e)}
-				/>
+				<div class="input-wrapper">
+					<label class="input-label">Start date:</label>
+					<input
+						type="datetime-local"
+						bind:value={startDate}
+						on:change={(e) => handleChange('start_date')(e)}
+					/>
+				</div>
+				<div class="input-wrapper">
+					<label class="input-label">End date:</label>
+					<input
+						type="datetime-local"
+						bind:value={endDate}
+						on:change={(e) => handleChange('end_date')(e)}
+					/>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -54,8 +58,20 @@
 
 	.content {
 		display: flex;
-		justify-content: space-between;
+		justify-content: start;
 		align-items: center;
 		height: 100%;
+	}
+
+	.input-wrapper {
+		display: block;
+		align-items: center;
+		margin-right: 20px;
+	}
+
+	.input-label {
+		display: block;
+		margin-right: 10px;
+		font-weight: bold;
 	}
 </style>

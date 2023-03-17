@@ -3,7 +3,6 @@
 	export let scheduledTimestamps = [];
 	export let startDate = moment();
 	export let endDate = moment().endOf('D');
-	const minutesInRange = 24 * 60;
 	const dateFormat = 'HH:mm:ss D MMM YYYY';
 	const hourFormat = 'HH:mm';
 
