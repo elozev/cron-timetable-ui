@@ -27,7 +27,11 @@
 	"dependencies": {
 		"@fontsource/be-vietnam": "^4.5.2",
 		"@smui/switch": "^7.0.0-beta.0",
+		"@sveltejs/adapter-node": "^1.2.3",
+		"config": "^3.3.9",
+		"express": "^4.18.2",
 		"flowbite-svelte": "^0.29.13",
+		"http-proxy-middleware": "^2.0.6",
 		"moment": "^2.29.4",
 		"svelte-material-ui": "^7.0.0-beta.0"
 	}
