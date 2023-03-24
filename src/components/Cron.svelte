@@ -4,6 +4,8 @@
 	import { getCronByName } from '../utils/data-retriever';
 	import Timeline from './Timeline.svelte';
 	import { onMount } from 'svelte';
+
+	import '@smui/switch/bare.css';
 	const DEFAULT_DATE_FORMAT = 'HH:mm:ss DD/MM/YYYY';
 
 	export let name;
