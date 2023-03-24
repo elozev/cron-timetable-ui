@@ -1,8 +1,6 @@
-import { CRONTIMETABLE_SERVICE } from "./constants"
-
 export const getCrons = async () => {
   try {
-    const data = await fetch(`${CRONTIMETABLE_SERVICE}/cron`, 
+    const data = await fetch(`/api/cron`, 
       {
         method: "GET", 
         headers: {
@@ -26,7 +24,7 @@ export const getCronByName = async (name, startDate, endDate) => {
   endDate && urlParams.set('endTime', endDate.toISOString());
 
   try {
-    const data = await fetch(`${CRONTIMETABLE_SERVICE}/cron/${name}?${urlParams}`, 
+    const data = await fetch(`/api/cron/${name}?${urlParams}`, 
       {
         method: "GET", 
         headers: {
